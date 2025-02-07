@@ -52,22 +52,11 @@ def convert_image_to_cartoon(image_path):
             print("Error: Unable to load image. Check the file path.")
             return
 
-        # Convert to grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-        # Apply median blur
-        gray = cv2.medianBlur(gray, 5)
-
-        # Detect edges
-        edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
-                                      cv2.THRESH_BINARY, 9, 9)
-
-        # Apply bilateral filter for color smoothing
+        edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 9)
         color = cv2.bilateralFilter(img, 9, 200, 200)
-
-        # Combine edges and color
-        cartoon = cv2.bitwise_and(color, color, mask=edges)
-
+        cartoon = cv2.bitwise_and(color, color, mask = edges)
+       
         # Save the cartoonified image
         cartoon_path = f"cartoon_{os.path.basename(image_path)}"
         cv2.imwrite(cartoon_path, cartoon)
